@@ -5,9 +5,19 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 public class Main {
+    private static final String PROPERTIES_FILE = "settings.properties";
+    private static Properties properties = new Properties();
+
     public static void main(String[] args) {
+        // Load properties
+        loadProperties();
+
         // Create the frame
         JFrame frame = new JFrame("Haikyuu!!");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -15,7 +25,7 @@ public class Main {
         frame.setLocationRelativeTo(null);
 
         // Singleton music instance
-        music bgMusic = music.getInstance("D:\\Haikyu\\resources\\hi.wav");
+        music bgMusic = music.getInstance(properties.getProperty("musicPath", "D:\\Haikyu\\resources\\hi.wav"));
         bgMusic.playMusic(true); // Play music in loop
 
         // Show the main panel
@@ -29,7 +39,8 @@ public class Main {
         frame.getContentPane().removeAll();
 
         // Set the background image
-        JLabel background = new JLabel(new ImageIcon("D:\\Haikyu\\resources\\bg.jpg")); // Replace with your image path
+        String bgImagePath = properties.getProperty("bgImagePath", "D:\\Haikyu\\resources\\bg.jpg");
+        JLabel background = new JLabel(new ImageIcon(bgImagePath));
         background.setBounds(0, 0, frame.getWidth(), frame.getHeight());
         background.setLayout(null);
         frame.add(background);
@@ -67,7 +78,7 @@ public class Main {
         animationTimer.start();
 
         // Create the "Exit" button with an image
-        ImageIcon buttonIcon = new ImageIcon("D:\\Haikyu\\resources\\btt.png"); // Replace with your button image path
+        ImageIcon buttonIcon = new ImageIcon("D:\\Haikyu\\resources\\btt.png");
         JButton exitButton = new JButton("Exit", buttonIcon);
         exitButton.setBounds((frame.getWidth() - 300) / 2, (frame.getHeight() - 80) / 2 + 25, 300, 60);
         exitButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -105,7 +116,7 @@ public class Main {
 
         // Create the "Settings" button with an image
         JButton settingsButton = new JButton("Settings", buttonIcon);
-        settingsButton.setBounds((frame.getWidth() - 300) / 2, (frame.getHeight() - 90) / 2 - 125, 300, 60);
+        settingsButton.setBounds((frame.getWidth() - 300) / 2, (frame.getHeight() - 90) / 2 - 105, 300, 60);
         settingsButton.setHorizontalTextPosition(SwingConstants.CENTER);
         settingsButton.setVerticalTextPosition(SwingConstants.CENTER);
         settingsButton.setFont(new Font("Kalpurush", Font.BOLD, 25));
@@ -122,6 +133,25 @@ public class Main {
 
         frame.revalidate();
         frame.repaint();
+
+        // Create the "Match" button with an image
+        JButton matchButton = new JButton("Match", buttonIcon);
+        matchButton.setBounds((frame.getWidth() - 300) / 2, (frame.getHeight() - 90) / 2 - 170, 300, 60);
+        matchButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        matchButton.setVerticalTextPosition(SwingConstants.CENTER);
+        matchButton.setFont(new Font("Kalpurush", Font.BOLD, 25));
+        matchButton.setForeground(Color.BLACK);
+        matchButton.setBorderPainted(false);
+        matchButton.setContentAreaFilled(false);
+        matchButton.setFocusPainted(false);
+        // Action to show Match panel
+        matchButton.addActionListener(e -> {
+            Match match = new Match(frame, bgMusic);
+            match.showMatchPanel();
+        });
+
+
+        background.add(matchButton);
     }
 
     public static void showSettingsPanel(JFrame frame, music bgMusic) {
@@ -129,13 +159,13 @@ public class Main {
         frame.getContentPane().removeAll();
 
         // Set the background image
-        JLabel background = new JLabel(new ImageIcon("D:\\Haikyu\\resources\\bg.jpg")); // Replace with your image path
+        JLabel background = new JLabel(new ImageIcon(properties.getProperty("bgImagePath", "D:\\Haikyu\\resources\\bg.jpg")));
         background.setBounds(0, 0, frame.getWidth(), frame.getHeight());
         background.setLayout(null);
         frame.add(background);
 
-        // Create the button icon (same as used for Team and Exit buttons)
-        ImageIcon buttonIcon = new ImageIcon("D:\\Haikyu\\resources\\btt.png"); // Replace with your button image path
+        // Create the button icon
+        ImageIcon buttonIcon = new ImageIcon("D:\\Haikyu\\resources\\btt.png");
 
         // Create "Change Background Music" button
         JButton changeMusicButton = new JButton("Change Background Music", buttonIcon);
@@ -154,10 +184,12 @@ public class Main {
             fileChooser.setDialogTitle("Select Background Music");
             int result = fileChooser.showOpenDialog(frame);
             if (result == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile(); // Declare selectedFile here
+                File selectedFile = fileChooser.getSelectedFile();
                 bgMusic.stopMusic(); // Stop current music
-                music newMusic = music.getInstance(selectedFile.getAbsolutePath()); // Load new music
+                music newMusic = music.getInstance(selectedFile.getAbsolutePath());
                 newMusic.playMusic(true); // Play new music in loop
+                properties.setProperty("musicPath", selectedFile.getAbsolutePath());
+                saveProperties(); // Save the new music path
             }
         });
         background.add(changeMusicButton);
@@ -179,8 +211,10 @@ public class Main {
             fileChooser.setDialogTitle("Select Background Image");
             int result = fileChooser.showOpenDialog(frame);
             if (result == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile(); // Declare selectedFile here
+                File selectedFile = fileChooser.getSelectedFile();
                 background.setIcon(new ImageIcon(selectedFile.getAbsolutePath())); // Change background image
+                properties.setProperty("bgImagePath", selectedFile.getAbsolutePath());
+                saveProperties(); // Save the new image path
             }
         });
         background.add(changeImageButton);
@@ -199,5 +233,23 @@ public class Main {
 
         frame.revalidate();
         frame.repaint();
+    }
+
+    private static void loadProperties() {
+        try (FileInputStream input = new FileInputStream(PROPERTIES_FILE)) {
+            properties.load(input);
+        } catch (IOException e) {
+            // Handle exception (e.g., file not found, etc.)
+            System.out.println("Could not load properties: " + e.getMessage());
+        }
+    }
+
+    private static void saveProperties() {
+        try (FileOutputStream output = new FileOutputStream(PROPERTIES_FILE)) {
+            properties.store(output, "Application Settings");
+        } catch (IOException e) {
+            // Handle exception
+            System.out.println("Could not save properties: " + e.getMessage());
+        }
     }
 }

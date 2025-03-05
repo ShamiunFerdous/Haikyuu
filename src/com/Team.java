@@ -4,22 +4,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 public class Team {
     private JFrame frame;
     private JPanel teamPanel;
     private music bgMusic;
+    private static final String PROPERTIES_FILE = "settings.properties";
+    private static Properties properties = new Properties();
 
     // Constructor to initialize Team with frame and music instance
     public Team(JFrame frame, music bgMusic) {
         this.frame = frame;
         this.bgMusic = bgMusic;
 
+        // Load properties to get the current background image and music path
+        loadProperties();
+
         teamPanel = new JPanel();
         teamPanel.setLayout(null);
 
-        // Background image
-        JLabel background = new JLabel(new ImageIcon("D:\\Haikyu\\resources\\background.png")); // Replace with your image path
+        // Set the background image from properties
+        String bgImagePath = properties.getProperty("bgImagePath", "D:\\Haikyu\\resources\\bg.jpg");
+        ImageIcon originalIcon = new ImageIcon(bgImagePath);
+        Image scaledImage = originalIcon.getImage().getScaledInstance(frame.getWidth(), frame.getHeight(), Image.SCALE_SMOOTH);
+        JLabel background = new JLabel(new ImageIcon(scaledImage));
         background.setBounds(0, 0, frame.getWidth(), frame.getHeight());
         background.setLayout(null); // Ensure proper layout for adding components
         teamPanel.add(background);
@@ -85,5 +96,14 @@ public class Team {
         frame.add(teamPanel);
         frame.revalidate();
         frame.repaint();
+    }
+
+    private static void loadProperties() {
+        try (FileInputStream input = new FileInputStream(PROPERTIES_FILE)) {
+            properties.load(input);
+        } catch (IOException e) {
+            // Handle exception (e.g., file not found, etc.)
+            System.out.println("Could not load properties: " + e.getMessage());
+        }
     }
 }

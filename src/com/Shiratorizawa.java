@@ -25,7 +25,7 @@ public class Shiratorizawa {
 
         // Shiratorizawa team members and images
         String[] teamMembers = {"Wakatoshi Ushijima", "Satori Tendo", "Eita Semi", "Reon Ohira",
-                "Kenjiro Shirabu", "Taichi Kawanishi", "Hayato Yamagata"};
+                "Kenjiro Shirabu", "Taichi Kawanishi", "Hayato Yamagata","Tsutomu Goshiki"};
         String[] memberImages = {
                 "D:\\Haikyu\\resources\\shiratorizawa\\ushijima.jpg",
                 "D:\\Haikyu\\resources\\shiratorizawa\\tendo.jpg",
@@ -34,6 +34,7 @@ public class Shiratorizawa {
                 "D:\\Haikyu\\resources\\shiratorizawa\\shirabu.jpg",
                 "D:\\Haikyu\\resources\\shiratorizawa\\kawanishi.jpg",
                 "D:\\Haikyu\\resources\\shiratorizawa\\yamagata.jpg",
+                "D:\\Haikyu\\resources\\shiratorizawa\\goshiki.jpg"
         };
 
         // Add buttons for team members with images

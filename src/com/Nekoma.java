@@ -25,11 +25,11 @@ public class Nekoma {
         nekomaPanel.add(background);
 
         // Nekoma team members and images
-        String[] teamMembers = {"Kuroo Tetsurou", "Yaku Morisuke", "Lev Haiba","Sō Inuoka",
-                "Fukunaga Koutarou", "Yamamoto Taketora", "Nobuyuki Kai", "Kozume Kenma"};
+        String[] teamMembers = {"Kuroo Tetsurou", "Kozume Kenma", "Yaku Morisuke", "Lev Haiba",
+                "Fukunaga Koutarou", "Yamamoto Taketora", "Nobuyuki Kai","Sō Inuoka"};
         String[] memberImages = {
-                "D:\\Haikyu\\resources\\nekoma\\kenma.jpg",
                 "D:\\Haikyu\\resources\\nekoma\\kuroo.jpg",
+                "D:\\Haikyu\\resources\\nekoma\\kenma.jpg",
                 "D:\\Haikyu\\resources\\nekoma\\yaku.jpg",
                 "D:\\Haikyu\\resources\\nekoma\\lev.jpg",
                 "D:\\Haikyu\\resources\\nekoma\\fukunaga.jpg",
