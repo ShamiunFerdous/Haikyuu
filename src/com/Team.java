@@ -36,7 +36,7 @@ public class Team {
         teamPanel.add(background);
 
         // Sample team names
-        String[] teams = {"Karasuno", "Aoba Johsai", "Shiratorizawa", "Nekoma"};
+        String[] teams = {"Karasuno", "Aoba Johsai", "Shiratorizawa", "Nekoma","Inarizaki"};
 
         // Button image path
         ImageIcon buttonIcon = new ImageIcon("D:\\Haikyu\\resources\\btt.png"); // Replace with your button image path
@@ -72,6 +72,9 @@ public class Team {
                         break;
                     case "Nekoma":
                         new Nekoma(frame, bgMusic).showNekomaPanel(); // Navigate to Nekoma panel
+                        break;
+                    case "Inarizaki":
+                        new Inarizaki(frame, bgMusic).showInarizakiPanel();
                         break;
                 }
             });

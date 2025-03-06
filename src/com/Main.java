@@ -98,7 +98,7 @@ public class Main {
 
         // Create the "Team" button with an image
         JButton teamButton = new JButton("Team", buttonIcon);
-        teamButton.setBounds((frame.getWidth() - 300) / 2, (frame.getHeight() - 90) / 2 - 50, 300, 60);
+        teamButton.setBounds((frame.getWidth() - 300) / 2, (frame.getHeight() - 90) / 2 - 35, 300, 60);
         teamButton.setHorizontalTextPosition(SwingConstants.CENTER);
         teamButton.setVerticalTextPosition(SwingConstants.CENTER);
         teamButton.setFont(new Font("Kalpurush", Font.BOLD, 25));
