@@ -7,3 +7,4 @@ Welcome to the Haikyuu World! This project is inspired by the popular anime *Hai
 - View a list of teams.
 - View members of each team.
 - Navigate through different team profiles.
+- Can see the results 
